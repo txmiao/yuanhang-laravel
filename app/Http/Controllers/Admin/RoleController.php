@@ -61,6 +61,7 @@ class RoleController extends Controller
         $role = Role::with('permissions')->find($id);
         $array = $role->permissions->toArray();
 
+        
         $array = array_pluck($array, 'id');
 
 
