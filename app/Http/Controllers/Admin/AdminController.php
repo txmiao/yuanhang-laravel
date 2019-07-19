@@ -28,11 +28,29 @@ class AdminController extends Controller
             ->when($params['_kw'], function ($query) use ($params) {
                 return $query->where($params['_t'], 'like', '%' . $params['_kw'] . '%');
             })
+            ->with(['roles'])
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
+            ->select('id','name','email','created_at')
             ->paginate(10);
-        return self::success('新增管理员成功', $lists);
-//        return view('admin.admin.index', compact('lists', 'params', 'roles'));
+        $data = $lists->getCollection();
+        foreach ($data as $k => &$v) {
+            $array = array_pluck($v['roles'], 'display_name');
+            $array = implode(',', $array);
+            $v['roles_name'] = $array;
+            unset($v['roles']);
+        }
+        $lists->setCollection(collect($data));
+        return self::success('查询管理员成功', $lists);
+    }
+
+    /**
+     * 全部权限---新增角色用
+     */
+    public function role()
+    {
+        $role = Role::all()->toArray();
+        return self::success('查询成功', $role);
     }
 
     /**
@@ -47,9 +65,22 @@ class AdminController extends Controller
         $admin = new Admin();
         $admin->headimgurl = 'admin/default.png'; //默认用户头像
         $admin->fill($data);
+//        dd($admin->toArray());
         if ($admin->save()) {
             $admin->roles()->attach($request->input('role_id'));
-            return self::success('新增管理员成功');
+            $data_t['id'] = $admin['id'];
+            $data_t['created_at'] = $admin['created_at'];
+
+            $admin_role = $admin::where('id', $admin['id'])->with('roles')->first();
+            $array = array_pluck($admin_role['roles'], 'display_name');
+            $array = implode(',', $array);
+
+            $data_t['roles_name'] = $array;
+
+
+            return self::success('新增管理员成功', $data_t);
+
+
         }
         return self::error('新增管理员失败');
     }
@@ -63,8 +94,8 @@ class AdminController extends Controller
     public function edit($id)
     {
         $admin = Admin::with('roles')->find($id);
-        $admin['roles_all'] = Role::all();
-        return self::success('查询成功', $admin);
+        $array = array_pluck($admin['roles'], 'id');
+        return self::success('查询成功', $array);
     }
 
     /**

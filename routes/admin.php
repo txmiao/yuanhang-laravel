@@ -78,6 +78,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
         Route::get('/createCode/{id}', 'AdminController@createCode')->name('admin.createCode');
         Route::post('/update', 'AdminController@update')->name('admin.update');
         Route::get('/destroy/{id}', 'AdminController@destroy')->name('admin.destroy');
+        Route::get('/role', 'AdminController@role')->name('admin.role');
     });
 
     //权限

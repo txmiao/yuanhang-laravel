@@ -60,12 +60,7 @@ class RoleController extends Controller
     {
         $role = Role::with('permissions')->find($id);
         $array = $role->permissions->toArray();
-
-
-        
         $array = array_pluck($array, 'id');
-
-
         if ($role) {
             return self::success('查询成功', $array);
         } else {
@@ -104,11 +99,8 @@ class RoleController extends Controller
      */
     public function permission()
     {
-
         $permission = Permission::all()->toArray();
         return self::success('查询成功', $permission);
-
-
     }
 
     /**
