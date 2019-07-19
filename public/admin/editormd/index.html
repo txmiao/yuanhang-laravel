@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Editor.md</title>
+	<link rel="stylesheet" href="css/editormd.min.css" />
+</head>
+<body>
+
+<div id="editormd">
+    <textarea style="display:none;" class="editormd-markdown-textarea" name="edit-markdown-doc">### Hello Editor.md !</textarea>
+    <textarea style="display:none;"  class="editormd-html-textarea" name="edit-html-code">### Hello Editor.md !</textarea>
+</div>
+
+ <div id="testEditorMdview">
+        <textarea id="appendTest" style="display:none;"></textarea>
+ </div>
+
+<button id="get_html_content">获取HTML内容</button>
+<button id="convert" type="button">点击转Html</button>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="lib/marked.min.js"></script>
+<script src="lib/prettify.min.js"></script>
+<script src="lib/raphael.min.js"></script>
+<script src="lib/underscore.min.js"></script>
+<script src="lib/sequence-diagram.min.js"></script>
+<script src="lib/flowchart.min.js"></script>
+<script src="lib/jquery.flowchart.min.js"></script>
+<script src="editormd.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var editor = editormd("editormd", {
+            path : "lib/", // Autoload modules mode, codemirror, marked... dependents libs path
+            width: "90%",
+        	height: 640,
+        	codeFold : true,
+        	saveHTMLToTextarea : true,
+        	emoji: true,
+        	editorTheme : 'mdn-like',
+			onload : function() {
+				var keyMap = {
+				    "Ctrl-S": function(cm) {
+				        alert(editor.getMarkdown());
+				    }
+				    
+				};
+				this.addKeyMap(keyMap);
+			}
+        });
+
+
+
+  //       editor.getMarkdown();       // 获取 Markdown 源码
+		// editor.getHTML();           // 获取 Textarea 保存的 HTML 源码
+		// editor.getPreviewedHTML();
+
+        /*
+        // or
+        var editor = editormd({
+            id   : "editormd",
+            path : "../lib/"
+        });
+        */
+
+        $('#get_html_content').click(function() {
+        	alert(editor.getMarkdown());
+        });
+
+        $('#convert').click(function() {
+        	var content=$(".editormd-markdown-textarea").val();//获取需要转换的内容
+        	console.log(content);
+ 			$("#appendTest").val(content);
+           	editormd.markdownToHTML("testEditorMdview", {
+                        //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                        htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                        //toc             : false,
+                        tocm            : true,    // Using [TOCM]
+                        //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+                        //gfm             : false,
+                        //tocDropdown     : true,
+                        // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+                        emoji           : true,
+                        taskList        : true,
+                        tex             : true,  // 默认不解析
+                        flowChart       : true,  // 默认不解析
+                        sequenceDiagram : true,  // 默认不解析
+                    });
+        });
+    });
+
+</script>
+</body>
+</html>
