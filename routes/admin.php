@@ -181,6 +181,10 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
         Route::get('/edit/{id}', 'ArticleController@edit')->name('article.edit');
         Route::post('/update', 'ArticleController@update')->name('article.update');
         Route::get('/destroy/{id}', 'ArticleController@destroy')->name('article.destroy');
+
+        Route::get('/category', 'ArticleController@categoryList')->name('article.category');
+        Route::post('/store_image', 'ArticleController@store_image')->name('article.store_image');
+
     });
 
     /*

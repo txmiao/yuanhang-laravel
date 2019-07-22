@@ -16,6 +16,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+
         $params = [
             '_t' => $request->input('_t', 'name'),
             '_kw' => $request->input('_kw', ''),
@@ -26,7 +27,8 @@ class CategoryController extends Controller
             })
             ->orderByDesc('id')
             ->paginate(10);
-        return view('admin.category.index', compact('lists', 'params'));
+        return self::success('查询成功', $lists);
+//        return view('admin.category.index', compact('lists', 'params'));
     }
 
     /**
@@ -38,9 +40,10 @@ class CategoryController extends Controller
     {
         $category = new Category($request->all());
         if ($category->save()) {
-            return self::success('添加成功');
+            $data_t['id'] = $category['id'];
+            $data_t['created_at'] = $category['created_at'];
+            return self::success('添加成功', $data_t);
         }
-
         return self::error('操作失败，请稍后重试！');
     }
 
