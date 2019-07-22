@@ -22,21 +22,21 @@ class ArticleController extends Controller
     {
 
 
-        $image = $request->file('image');
+        $image = $request->file('thumbnail');
 
-        if (!$request->hasFile('image') || !$image->isValid()) {
+        if (!$request->hasFile('thumbnail') || !$image->isValid()) {
             return $this->response->errorBadRequest('未知图像资源');
         }
         $request->type = 'abc';
-        $path = $request->file('image')->store($request->type);
+        $path = $request->file('thumbnail')->store($request->type);
 
-        $realPath = storage_path('app/public') . '/' . $path;
-
-        $img = \Intervention\Image\Facades\Image::make($realPath);
-        $img->widen(floor($img->width() / 2), function ($constraint) {
-            $constraint->upsize();
-        })
-            ->save($realPath);
+//        $realPath = storage_path('app/public') . '/' . $path;
+//
+//        $img = \Intervention\Image\Facades\Image::make($realPath);
+//        $img->widen(floor($img->width() / 2), function ($constraint) {
+//            $constraint->upsize();
+//        })
+//            ->save($realPath);
 
         $image = new Image();
         $image->path = $path;
@@ -115,8 +115,8 @@ class ArticleController extends Controller
 //
 //            $article->thumbnail = $paths;
 //        }
-        $article->thumbnail =  $article->images;
-        unset( $article->images);
+//        $article->thumbnail =  $article->images;
+//        unset( $article->images);
 //        dd($article->toArray());
 
         if ($article->save()) {
@@ -153,27 +153,27 @@ class ArticleController extends Controller
         $article = Article::findOrFail($request->id);
         $article->fill($request->all());
 
-        if ($request->hasFile('thumbnail_upload')) {
-            $uploadFiles = $request->file('thumbnail_upload');
-            $storePath = 'article_images';
-            $paths = [];
-
-            foreach ($uploadFiles as $uploadItem) {
-                if ($uploadItem->isValid()) {
-                    $filename = $uploadItem->store($storePath);
-                    array_push($paths, $filename);
-                }
-            }
-
-            //删除旧图片
-            if ($article->thumbnail) {
-                foreach ($article->thumbnail as $delItem) {
-                    \Storage::exists($delItem) && \Storage::delete($delItem);
-                }
-            }
-
-            $article->thumbnail = $paths;
-        }
+//        if ($request->hasFile('thumbnail_upload')) {
+//            $uploadFiles = $request->file('thumbnail_upload');
+//            $storePath = 'article_images';
+//            $paths = [];
+//
+//            foreach ($uploadFiles as $uploadItem) {
+//                if ($uploadItem->isValid()) {
+//                    $filename = $uploadItem->store($storePath);
+//                    array_push($paths, $filename);
+//                }
+//            }
+//
+//            //删除旧图片
+//            if ($article->thumbnail) {
+//                foreach ($article->thumbnail as $delItem) {
+//                    \Storage::exists($delItem) && \Storage::delete($delItem);
+//                }
+//            }
+//
+//            $article->thumbnail = $paths;
+//        }
 
         if ($article->save()) {
             return self::success('更新成功');
