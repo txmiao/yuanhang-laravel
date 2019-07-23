@@ -8,18 +8,7 @@
 Route::get('getcs', 'CsController@getcs')->name('login.getcs');
 Route::post('postcs', 'CsController@postcs')->name('login.postcs');
 
-//$api = app('Dingo\Api\Routing\Router');
-//$api->version('v11', [
-//    'namespace' => 'Api',
-//], function ($api) {
-//    $api->group([
-//        'middleware' => 'api.throttle',
-//    ], function ($api) {
-//
-////        $api->post('authorizations', 'AuthorizationsController@store'); //登录
-//        $api->post('login', 'LoginController@login');
-//    });
-//});
+
 
 Route::group(['namespace' => 'Auth','middleware' => ['cors']], function () {
     //登录、找回密码
@@ -33,7 +22,7 @@ Route::group(['namespace' => 'Auth','middleware' => ['cors']], function () {
 });
 
 
-Route::group(['namespace' => 'Admin'], function () {
+Route::group(['namespace' => 'Admin','middleware' => ['cors']], function () {
     Route::any('/wechat', 'WeChatController@serve'); //微信对接
     Route::post('system/upload', 'SystemController@upload')->name('system.upload');
     Route::get('company/{id}/share/', 'CompanyController@share')->name('company.share');

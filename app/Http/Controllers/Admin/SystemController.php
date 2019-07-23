@@ -84,19 +84,9 @@ class SystemController extends Controller
      */
     public function upload(Request $request)
     {
-        if ($request->hasFile('uploadImage') && $request->file('uploadImage')->isValid()) {
-            switch ($request->type) {
-                case 'background_image':
-                    $storePath = 'app_background';
-                    break;
-                case 'platform_logo':
-                    $storePath = 'platform_logo';
-                    break;
-                default:
-                    $storePath = 'app_images';
-                    break;
-            }
 
+        if ($request->hasFile('uploadImage') && $request->file('uploadImage')->isValid()) {
+            $storePath = 'app_background';
             $filename = $request->file('uploadImage')->store($storePath);
             return self::success('上传成功', ['path' => $filename]);
         }
