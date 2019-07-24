@@ -27,12 +27,12 @@ class UserRequest extends FormRequest
         if (!$userId) {
             $rules = [
                 'password' => 'required|min:6',
-                'name' => 'required|string|max:20|unique:users,name',
+                'real_name' => 'required|string|max:20|unique:users,real_name',
                 'phone' => ['required', 'regex:/^1[3456789]\d{9}$/', 'unique:users'],
             ];
         } else {
             $rules = [
-                'name' => 'required|string|max:20|unique:users,name,' . $userId,
+//                'name' => 'required|string|max:20|unique:users,name,' . $userId,
                 'phone' => ['required', 'regex:/^1[3456789]\d{9}$/', 'unique:users,phone,' . $userId],
             ];
         }

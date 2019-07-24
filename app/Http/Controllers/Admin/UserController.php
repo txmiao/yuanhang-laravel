@@ -31,17 +31,13 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-//        $app = app();
-//        $log = $app->make('log');
-//        $log->info("post_index",['data'=>'this is post index']);
-
         log::info("post_index", ['data' => 'this is post index']);
-//        dump_sql();
         $params = [
             '_t' => $request->input('_t', 'name'),
             '_kw' => $request->input('_kw', ''),
             'type' => $request->input('type', ''),
         ];
+//        dump_sql();
         $lists = User::select()
             ->when($params['_kw'], function ($query) use ($params) {
                 return $query->where($params['_t'], 'like', '%' . $params['_kw'] . '%');
@@ -53,7 +49,6 @@ class UserController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(10);
         return self::success('查询成功', $lists);
-//        return view('admin.user.index', compact('lists', 'params'));
     }
 
     /**
@@ -68,7 +63,9 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]));
         if ($user->save()) {
-            return self::success();
+            $data_t['id'] = $user['id'];
+            $data_t['created_at'] = $user['created_at'];
+            return self::success('添加成功', $data_t);
         }
         return self::error();
     }
