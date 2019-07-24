@@ -118,7 +118,8 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
     |--------------------------------------------------------------------------
     */
     //用户管理
-    Route::group(['prefix' => 'user'], function () {
+
+        Route::group(['prefix' => 'user','middleware' => ['cors']], function () {
         Route::get('/', 'UserController@index')->name('user.index');
         Route::post('/', 'UserController@store')->name('user.store');
         Route::get('/edit/{id}', 'UserController@edit')->name('user.edit');

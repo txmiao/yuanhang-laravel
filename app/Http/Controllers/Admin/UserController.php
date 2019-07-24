@@ -35,8 +35,8 @@ class UserController extends Controller
 //        $log = $app->make('log');
 //        $log->info("post_index",['data'=>'this is post index']);
 
-        log::info("post_index",['data'=>'this is post index']);
-
+        log::info("post_index", ['data' => 'this is post index']);
+//        dump_sql();
         $params = [
             '_t' => $request->input('_t', 'name'),
             '_kw' => $request->input('_kw', ''),
@@ -52,7 +52,8 @@ class UserController extends Controller
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(10);
-        return view('admin.user.index', compact('lists', 'params'));
+        return self::success('查询成功', $lists);
+//        return view('admin.user.index', compact('lists', 'params'));
     }
 
     /**
