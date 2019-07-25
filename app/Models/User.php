@@ -190,4 +190,12 @@ class User extends Authenticatable implements JWTSubject
         return CommonService::status_return(false,[]);
     }
 
+    /**
+     * 用户正向关联用户信息。
+     */
+    public function userinfo()
+    {
+        return $this->hasOne(UserInfo::class);
+    }
+
 }

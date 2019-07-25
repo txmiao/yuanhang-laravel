@@ -45,6 +45,7 @@ class UserController extends Controller
             ->when($params['type'], function ($query) use ($params) {
                 return $query->where('type', $params['type']);
             })
+            ->with(['userinfo'])
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(10);
@@ -69,6 +70,10 @@ class UserController extends Controller
         }
         return self::error();
     }
+
+
+
+
 
     /**
      * 编辑会员

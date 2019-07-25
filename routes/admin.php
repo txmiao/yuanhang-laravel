@@ -9,8 +9,7 @@ Route::get('getcs', 'CsController@getcs')->name('login.getcs');
 Route::post('postcs', 'CsController@postcs')->name('login.postcs');
 
 
-
-Route::group(['namespace' => 'Auth','middleware' => ['cors']], function () {
+Route::group(['namespace' => 'Auth', 'middleware' => ['cors']], function () {
     //登录、找回密码
     Route::get('login', 'LoginController@index')->name('login.index');
     Route::post('login', 'LoginController@login')->name('login.login');
@@ -22,7 +21,7 @@ Route::group(['namespace' => 'Auth','middleware' => ['cors']], function () {
 });
 
 
-Route::group(['namespace' => 'Admin','middleware' => ['cors']], function () {
+Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
     Route::any('/wechat', 'WeChatController@serve'); //微信对接
     Route::post('system/upload', 'SystemController@upload')->name('system.upload');
     Route::get('company/{id}/share/', 'CompanyController@share')->name('company.share');
@@ -119,12 +118,21 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
     */
     //用户管理
 
-        Route::group(['prefix' => 'user','middleware' => ['cors']], function () {
+    Route::group(['prefix' => 'user', 'middleware' => ['cors']], function () {
         Route::get('/', 'UserController@index')->name('user.index');
         Route::post('/', 'UserController@store')->name('user.store');
         Route::get('/edit/{id}', 'UserController@edit')->name('user.edit');
         Route::post('/update', 'UserController@update')->name('user.update');
         Route::get('/destroy/{id}', 'UserController@destroy')->name('user.destroy');
+    });
+
+    Route::group(['prefix' => 'user_info', 'middleware' => ['cors']], function () {
+        Route::get('/', 'UserInfoController@index')->name('user_info.index');
+
+        Route::post('/', 'UserInfoController@store')->name('user_info.store');
+        Route::get('/edit/{id}', 'UserInfoController@edit')->name('user_info.edit');
+        Route::post('/update', 'UserInfoController@update')->name('user_info.update');
+        Route::get('/destroy/{id}', 'UserInfoController@destroy')->name('user_info.destroy');
     });
 
     //合伙人等级管理
