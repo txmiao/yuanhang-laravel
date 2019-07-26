@@ -31,7 +31,7 @@ class AdminController extends Controller
             ->with(['roles'])
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
-            ->select('id','name','email','created_at')
+            ->select('id','name','email','created_at','login_method')
             ->paginate(10);
         $data = $lists->getCollection();
         foreach ($data as $k => &$v) {
@@ -41,6 +41,7 @@ class AdminController extends Controller
             unset($v['roles']);
         }
         $lists->setCollection(collect($data));
+
         return self::success('查询管理员成功', $lists);
     }
 
@@ -116,6 +117,7 @@ class AdminController extends Controller
         if (!empty($request->input('password'))) {
             $admin->password = bcrypt($request->input('password'));
         }
+        $admin->fill($request->all());
         if ($admin->save()) {
             $admin->roles()->sync($request->input('role_id'));
             return self::success('修改管理员成功');

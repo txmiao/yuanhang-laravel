@@ -17,7 +17,7 @@ class CheckUserLogin
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::guard('web')->check()) {
+        if (!Auth::guard('admin')->check()) {
             //使用guest而不用to,route，在重定向时会将当前url保存到session中，
             //这样可以在登陆以后，使用Redirect::intended()方法跳转到之前的页面继续业务
             return Redirect::guest('/login');

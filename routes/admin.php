@@ -60,6 +60,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
     */
     //管理员
     Route::group(['prefix' => 'admin'], function () {
+
         Route::get('/', 'AdminController@index')->name('admin.index');
         Route::post('/', 'AdminController@store')->name('admin.store');
         Route::get('/edit/{id}', 'AdminController@edit')->name('admin.edit');

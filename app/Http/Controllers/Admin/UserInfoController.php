@@ -44,6 +44,5 @@ class UserInfoController extends Controller
         }
         return self::error('更新失败');
 
-
     }
 }
