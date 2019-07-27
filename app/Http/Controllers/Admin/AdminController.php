@@ -6,11 +6,17 @@ use App\Http\Requests\Admin\AdminRequest;
 use App\Models\Admin;
 use App\Models\LoginLog;
 use App\Models\Role;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 class AdminController extends Controller
 {
+
     /**
      * 管理员列表
      * @param Request $request
@@ -18,8 +24,9 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::all();
+        $admin = Auth::guard('admin')->user();
 
+        $roles = Role::all();
         $params = [
             '_t' => $request->input('_t', 'name'),
             '_kw' => $request->input('_kw', ''),
