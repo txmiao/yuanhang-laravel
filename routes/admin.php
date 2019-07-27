@@ -28,7 +28,8 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
 });
 
 //Route::group(['namespace' => 'Admin', 'middleware' => ['check.login', 'check.permission', 'generate.menu']], function () {
-Route::group(['namespace' => 'Admin', 'middleware' => ['jwt.auth','cors']], function () {
+Route::group(['namespace' => 'Admin', 'middleware' => ['cors','jwt.auth', 'check.permission']], function () {
+//Route::group(['namespace' => 'Admin', 'middleware' => ['cors']], function () {
     /*
     |--------------------------------------------------------------------------
     | 仪表盘

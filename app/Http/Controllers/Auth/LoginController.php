@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
+use App\Models\Menu;
+
 class LoginController extends Controller
 {
     /*
@@ -164,16 +166,58 @@ class LoginController extends Controller
      */
     public function tree()
     {
-        $datat['code'] = 20000;
-        $datat['data'][0]['path'] = '/icon';
-        $datat['data'][0]['component'] = 'la';
-        $datat['data'][0]['children'][0]['path'] = 'index';
-        $datat['data'][0]['children'][0]['name'] = 'Icons';
-        $datat['data'][0]['children'][0]['component'] = "icont";
-        $datat['data'][0]['children'][0]['meta']['title'] = 'Icons';
-        $datat['data'][0]['children'][0]['meta']['icon'] = 'icon';
-        $datat['data'][0]['children'][0]['meta']['noCache'] = true;
-        return $datat;
+
+//        $datat['code'] = 20000;
+//        $datat['data'][0]['path'] = '/icon';
+//        $datat['data'][0]['component'] = 'la';
+//        $datat['data'][0]['children'][0]['path'] = 'index';
+//        $datat['data'][0]['children'][0]['name'] = 'Icons';
+//        $datat['data'][0]['children'][0]['component'] = "icont";
+//        $datat['data'][0]['children'][0]['meta']['title'] = 'Icons';
+//        $datat['data'][0]['children'][0]['meta']['icon'] = 'icon';
+//        $datat['data'][0]['children'][0]['meta']['noCache'] = true;
+//        return $datat;
+
+        $list = Menu::select()
+            ->orderBy('pid', 'asc')
+            ->orderBy('sort', 'desc')
+            ->orderBy('created_at', 'asc')
+            ->orderBy('id', 'desc')
+            ->get()
+            ->toArray();
+        foreach ($list as $k=>&$v){
+            $v['meta'] =json_decode($v['meta']);
+        }
+
+//        dd($list);
+        $menuList = get_tree_list_with_child($list);
+//        dd($menuList);
+        //如果不是超级管理员则需要做权限验证
+        if (!Auth::guard('admin')->user()->hasRole('SuperAdmin')) {
+            foreach ($menuList as $key => &$val) {
+
+                //释放当前用户没有权限操作的资源
+                foreach ($val['child'] as $k => &$v) {
+                    if (!Auth::guard('admin')->user()->can($v['permission'])) {
+                        unset($val['child'][$k]);
+                    }
+                }
+                unset($v);
+
+                //如果没有子资源则释放这个资源
+                if (!count($val['child'])) {
+                    unset($menuList[$key]);
+                }
+            }
+            unset($val);
+
+//            dd($menuList);
+        }
+
+//        view()->share('menu', $menuList); //获取所有菜单的树形结构
+//        view()->share('currMenu', $request->route()->getName());
+
+        return self::success('查询成功', $menuList);
     }
 
 }

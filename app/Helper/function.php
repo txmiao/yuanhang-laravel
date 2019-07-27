@@ -71,7 +71,8 @@ function get_tree_list_with_child(&$data, $pid = 0, $level = 0, $pidField = 'pid
     foreach ($data as $key => &$value) {
         if ($value[$pidField] == $pid) {
             $value['level'] = $level;
-            $value['child'] = get_tree_list_with_child($data, $value['id'], $level + 1);
+//            $value['child'] = get_tree_list_with_child($data, $value['id'], $level + 1);
+            $value['children'] = get_tree_list_with_child($data, $value['id'], $level + 1);
             $tree[] = $value;
             unset($data[$key]);
         }
