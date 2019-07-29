@@ -18,6 +18,9 @@ Route::group(['namespace' => 'Auth', 'middleware' => ['cors']], function () {
     Route::get('auth/refresh_captcha', 'LoginController@refreshCaptcha')->name('auth.refresh_captcha'); //刷新验证码
 
     Route::get('/tree/', 'LoginController@tree')->name('login.tree');
+
+    Route::get('loginWay', 'LoginController@loginWay')->name('login.login_way');
+
 });
 
 

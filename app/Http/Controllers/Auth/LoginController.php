@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
@@ -185,8 +186,8 @@ class LoginController extends Controller
             ->orderBy('id', 'desc')
             ->get()
             ->toArray();
-        foreach ($list as $k=>&$v){
-            $v['meta'] =json_decode($v['meta']);
+        foreach ($list as $k => &$v) {
+            $v['meta'] = json_decode($v['meta']);
         }
 
 //        dd($list);
@@ -220,4 +221,10 @@ class LoginController extends Controller
         return self::success('查询成功', $menuList);
     }
 
+//    登陆方式
+    public function loginWay(Request $request)
+    {
+        $login_method = DB::table('admins')->where('name', $request->input('username'))->value('login_method');
+        return self::success('查询成功', $login_method);
+    }
 }
